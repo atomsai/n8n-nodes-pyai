@@ -1,0 +1,56 @@
+{
+  "name": "n8n-nodes-pyai",
+  "version": "0.1.0",
+  "description": "Transcribe call recordings with PyAI Hear and summarize them with PyAI Recap in n8n",
+  "license": "MIT",
+  "homepage": "https://github.com/atomsai/n8n-nodes-pyai#readme",
+  "author": {
+    "name": "PyAI",
+    "email": "support@pyai.com"
+  },
+  "keywords": [
+    "n8n-community-node-package",
+    "pyai",
+    "transcription",
+    "call-summary"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atomsai/n8n-nodes-pyai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atomsai/n8n-nodes-pyai/issues"
+  },
+  "scripts": {
+    "build": "n8n-node build",
+    "lint": "n8n-node lint",
+    "test": "node --test test/*.test.cjs"
+  },
+  "files": [
+    "dist",
+    "workflows"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "strict": true,
+    "credentials": [
+      "dist/credentials/PyAiApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/PyAi/PyAi.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "0.58.7",
+    "eslint": "9.39.4",
+    "prettier": "3.8.3",
+    "typescript": "5.9.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  }
+}

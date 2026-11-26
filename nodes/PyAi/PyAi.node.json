@@ -1,0 +1,14 @@
+{
+  "node": "n8n-nodes-pyai.pyAi",
+  "nodeVersion": "1.0",
+  "codexVersion": "1.0",
+  "categories": ["Communication", "Analytics"],
+  "resources": {
+    "credentialDocumentation": [
+      { "url": "https://docs.pyai.com/" }
+    ],
+    "primaryDocumentation": [
+      { "url": "https://github.com/atomsai/n8n-nodes-pyai#readme" }
+    ]
+  }
+}

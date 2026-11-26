@@ -1,0 +1,140 @@
+{
+  "name": "Summarize a call recording with PyAI and post to Slack",
+  "nodes": [
+    {
+      "id": "b1a6dabe-210f-4582-8887-f01bcb4106f9",
+      "name": "Run manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "99120f35-adc2-4bf2-aa57-781426f5b564",
+      "name": "Recording settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d5cc9209-e64e-413e-9197-d2826dc54279",
+              "name": "recordingUrl",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "4114287a-b0c4-43ad-b960-4a8ca2096b36",
+              "name": "callId",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "3767cf46-6a30-444b-ab13-56c5b4c9d83c",
+              "name": "slackChannelId",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "notes": "Fill in an HTTPS recording URL, a unique call ID, and the Slack channel ID.",
+      "notesInFlow": true
+    },
+    {
+      "id": "3dbf3689-24e4-4e84-858f-81f87d2d4bbe",
+      "name": "Transcribe and summarize",
+      "type": "n8n-nodes-pyai.pyAi",
+      "typeVersion": 1,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "operation": "transcribeAndSummarize",
+        "recordingUrl": "={{ $json.recordingUrl }}",
+        "callId": "={{ $json.callId }}",
+        "timeoutSeconds": 300
+      }
+    },
+    {
+      "id": "39b454b8-358b-4219-9297-cee7d310eca0",
+      "name": "Post summary to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "authentication": "accessToken",
+        "resource": "message",
+        "operation": "post",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $('Recording settings').item.json.slackChannelId }}"
+        },
+        "messageType": "text",
+        "text": "={{ ['*Call summary*', String($json.summary).slice(0, 2200).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'), $json.nextSteps ? '*Next steps*\\n' + String($json.nextSteps).slice(0, 600).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') : ''].filter(Boolean).join('\\n\\n') }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false,
+          "unfurl_links": false,
+          "unfurl_media": false
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Run manually": {
+      "main": [
+        [
+          {
+            "node": "Recording settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recording settings": {
+      "main": [
+        [
+          {
+            "node": "Transcribe and summarize",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe and summarize": {
+      "main": [
+        [
+          {
+            "node": "Post summary to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataErrorExecution": "none",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {}
+}
