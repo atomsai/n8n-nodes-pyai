@@ -1,12 +1,12 @@
 {
   "name": "n8n-nodes-pyai",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Transcribe call recordings with PyAI Hear and summarize them with PyAI Recap in n8n",
   "license": "MIT",
   "homepage": "https://github.com/atomsai/n8n-nodes-pyai#readme",
   "author": {
     "name": "PyAI",
-    "email": "support@pyai.com"
+    "email": "gaurav@pyai.com"
   },
   "keywords": [
     "n8n-community-node-package",
